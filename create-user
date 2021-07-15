@@ -1,0 +1,20 @@
+#!/bin/sh
+
+script_dir="$(realpath "$(dirname "$0")")"
+prog_name="$(basename "$0")"
+
+usage() {
+  echo "$prog_name: $1"
+  echo "$prog_name: $prog_name <username> <password>"
+}
+
+if [ "$#" -ne 2 ]; then
+  usage "invalid number of arguments"
+  exit 1
+fi
+
+auth_dir="$script_dir/auth"
+
+mkdir -p "$auth_dir"
+
+docker run --entrypoint htpasswd httpd:2 -Bbn "$1" "$2" >>"$auth_dir/htpasswd"
