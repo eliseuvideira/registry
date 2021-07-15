@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  registry:
+    image: registry:2
+    environment:
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+    ports:
+      - 5000:5000
+    restart: unless-stopped
+    volumes:
+      - ./auth:/auth
+      - ./certs:/certs
+      - ./data:/var/lib/registry
