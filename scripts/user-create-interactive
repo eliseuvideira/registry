@@ -36,7 +36,7 @@ fi
 
 ## username
 printf "username: "
-read username
+read -r username
 
 if [ "$username" = "" ]; then
   username=
@@ -45,7 +45,7 @@ fi
 
 ## password
 printf "password: "
-read -s password
+read -r -s password
 printf "\n"
 
 if [ "$password" = "" ]; then
@@ -55,7 +55,7 @@ fi
 
 fix_directory_ownership "$auth_dir"
 
-create_hash_string "$(echo "$username" | tr -d "\n")" "$(echo "$password" | tr -d "\n")" >>"$auth_filepath"
+create_hash_string "$username" "$password" >>"$auth_filepath"
 
 # clear variables
 username=
