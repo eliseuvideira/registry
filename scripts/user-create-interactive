@@ -55,7 +55,7 @@ fi
 
 fix_directory_ownership "$auth_dir"
 
-create_hash_string "$username" "$password" >>"$auth_filepath"
+create_hash_string "$(echo "$username" | tr -d "\n")" "$(echo "$password" | tr -d "\n")" >>"$auth_filepath"
 
 # clear variables
 username=
