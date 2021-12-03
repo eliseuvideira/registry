@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+script_name="$0"
+script_dir="$(realpath "$(dirname "$0")")"
+
+root_dir="$(realpath "$script_dir/..")"
+
+auth_dir="$root_dir/auth"
+
+auth_filepath="$auth_dir/htpasswd"
+
+usage() {
+  echo "$script_name: usage: $script_name USERNAME PASSWORD" >&2
+}
+
+exit_with_error() {
+  echo "$script_name: error: $1" >&2
+  usage
+  exit 1
+}
+
+fix_directory_ownership() {
+  sudo chown -R "$(id -u)":"$(id -g)" "$1"
+}
+
+create_hash_string() {
+  docker run --entrypoint htpasswd httpd:2 -Bbn "$1" "$2" | sed '/^$/d'
+}
+
+# check number of arguments
+if [ "$#" != "0" ]; then
+  exit_with_error "invalid number of arguments"
+fi
+
+# reading variables
+
+## username
+printf "username: "
+read username
+
+if [ "$username" = "" ]; then
+  username=
+  exit_with_error "username cannot be empty"
+fi
+
+## password
+printf "password: "
+read -s password
+printf "\n"
+
+if [ "$password" = "" ]; then
+  password=
+  exit_with_error "password cannot be empty"
+fi
+
+fix_directory_ownership "$auth_dir"
+
+create_hash_string "$username" "$password" >>"$auth_filepath"
+
+# clear variables
+username=
+password=

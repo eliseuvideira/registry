@@ -1,3 +1,5 @@
-auth/
-certs/
-data/
+auth/*
+storage/*
+.env
+!auth/.gitkeep
+!storage/.gitkeep

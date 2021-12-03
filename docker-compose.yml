@@ -12,5 +12,4 @@ services:
     restart: unless-stopped
     volumes:
       - ./auth:/auth
-      - ./certs:/certs
-      - ./data:/var/lib/registry
+      - ./storage:/var/lib/registry
